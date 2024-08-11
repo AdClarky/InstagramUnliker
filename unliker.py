@@ -30,8 +30,6 @@ def main():
 
     done_urls = history.read()
 
-    print(done_urls)
-
     urls = read_urls(config.liked_posts_path)
 
     options = webdriver.FirefoxOptions()
