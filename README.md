@@ -17,4 +17,7 @@ Add the path of the profile to the config.
 
 Install requirements
 
+Note before running: there is a 20 second delay between unliking each post. This should hopefuly prevent
+Instagram from limiting you.
+
 Run `python unliker.py`
