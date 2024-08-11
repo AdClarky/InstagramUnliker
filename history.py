@@ -9,9 +9,12 @@ def write(url: str) -> None:
 
 
 def read() -> List[str]:
-    with open("history.csv", "r") as f:
-        reader = csv.reader(f)
-        return list(reader)[0]
+    try:
+        with open("history.csv", "r") as f:
+            reader = csv.reader(f)
+            return list(reader)[0]
+    except FileNotFoundError:
+        return []
 
 
 def write_empty(url: str) -> None:
