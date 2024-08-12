@@ -17,6 +17,7 @@ def unlike_all(driver: webdriver.Firefox) -> bool:
         return False
     for element in elements:
         element.click()
+    time.sleep(9)
     elements = driver.find_elements(By.CSS_SELECTOR, "[aria-label=Unlike]")
     if len(elements):
         logging.error(f"Rate limited: {driver.current_url}")
@@ -61,10 +62,8 @@ def main():
             history.write_empty(url)
             history.write(url)
             continue
-        time.sleep(1)
         if not unlike_all(driver):
             continue
-        time.sleep(9)
 
     driver.quit()
 
