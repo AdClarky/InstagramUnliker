@@ -18,6 +18,10 @@ def unlike_all(driver: webdriver.Firefox):
         element.click()
     history.write(driver.current_url)
 
+def is_blank(driver: webdriver.Firefox) -> bool:
+    head = driver.find_elements(By.XPATH, "//div[1]")
+    return head == []
+
 
 def main():
     logging.basicConfig(
@@ -31,6 +35,7 @@ def main():
     done_urls = history.read()
 
     urls = read_urls(config.liked_posts_path)
+    urls = [url.replace("/reel/", "/reels/") for url in urls]
 
     options = webdriver.FirefoxOptions()
     options.add_argument("-profile")
@@ -43,9 +48,13 @@ def main():
             continue
         logging.info(f"Processing {url}")
         driver.get(url)
-        time.sleep(10)
+        if is_blank(driver):
+            logging.error(f"Blank page: {url}")
+            history.write_empty(url)
+            continue
+        time.sleep(5)
         unlike_all(driver)
-        time.sleep(10)
+        time.sleep(5)
 
     driver.quit()
 
