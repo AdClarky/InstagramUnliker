@@ -58,6 +58,7 @@ def main():
         if is_blank(driver):
             logging.error(f"Blank page: {url}")
             history.write_empty(url)
+            history.write(url)
             continue
         time.sleep(5)
         unlike_all(driver)
