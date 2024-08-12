@@ -9,14 +9,21 @@ from urlReader import read_urls
 from config import Config
 
 
-def unlike_all(driver: webdriver.Firefox):
+def unlike_all(driver: webdriver.Firefox) -> None:
     elements = driver.find_elements(By.CSS_SELECTOR, "[aria-label=Unlike]")
     if not len(elements):
         logging.warning(f"No unlike found for {driver.current_url}")
         history.write_empty(driver.current_url)
+        return
     for element in elements:
         element.click()
+    elements = driver.find_elements(By.CSS_SELECTOR, "[aria-label=Unlike]")
+    if len(elements):
+        logging.error(f"Rate limited: {driver.current_url}")
+        time.sleep(3600)
+        unlike_all(driver)
     history.write(driver.current_url)
+
 
 def is_blank(driver: webdriver.Firefox) -> bool:
     head = driver.find_elements(By.XPATH, "//div[1]")
