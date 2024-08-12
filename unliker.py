@@ -8,6 +8,9 @@ import history
 from urlReader import read_urls
 from config import Config
 
+SLEEP_TIME = 10
+SLEEP_MIN_LONG = 20
+
 
 def unlike_all(driver: webdriver.Firefox) -> bool:
     elements = driver.find_elements(By.CSS_SELECTOR, "[aria-label=Unlike]")
@@ -17,12 +20,12 @@ def unlike_all(driver: webdriver.Firefox) -> bool:
         return False
     for element in elements:
         element.click()
-    time.sleep(9)
+    time.sleep(SLEEP_TIME)
     elements = driver.find_elements(By.CSS_SELECTOR, "[aria-label=Unlike]")
     if len(elements):
         logging.warning(f"Rate limited: {driver.current_url}")
-        for i in range(60):
-            logging.info(f"Sleeping for {60-i} minutes...")
+        for i in range(SLEEP_MIN_LONG):
+            logging.info(f"Sleeping for {SLEEP_MIN_LONG-i} minutes...")
             time.sleep(60)
         unlike_all(driver)
     history.write(driver.current_url)
