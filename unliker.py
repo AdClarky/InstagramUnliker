@@ -8,7 +8,7 @@ import history
 from urlReader import read_urls
 from config import Config
 
-SLEEP_TIME = 10
+SLEEP_TIME = 20
 SLEEP_MIN_LONG = 20
 
 
@@ -56,6 +56,8 @@ def main():
     options.add_argument(config.firefox_profile_path)
     driver = webdriver.Firefox(options=options)
 
+    num_processed = 0
+
     for url in urls:
         if url in done_urls:
             logging.info(f"Skipping as already processed: {url}")
@@ -67,8 +69,9 @@ def main():
             history.write_empty(url)
             history.write(url)
             continue
-        if not unlike_all(driver):
-            continue
+        if unlike_all(driver):
+            num_processed += 1
+            logging.info(f"Successfully processed #{num_processed}: {driver.current_url}")
 
     driver.quit()
 
