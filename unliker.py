@@ -55,6 +55,7 @@ def main():
 
     urls = read_urls(config.liked_posts_path)
     urls = [url.replace("/reel/", "/reels/") for url in urls]
+    total = len(urls)
 
     options = webdriver.FirefoxOptions()
     options.add_argument("-profile")
@@ -78,7 +79,8 @@ def main():
             num_processed += 1
             if (num_processed % LONG_PAUSE_AMOUNT) == 0:
                 long_sleep(LONG_SLEEP_MINS)
-            logging.info(f"Successfully processed #{num_processed}: {driver.current_url}")
+            logging.info(f"#{num_processed} processed, {round((num_processed / total) * 100, 2)}% complete: "
+                         f"{driver.current_url}")
 
     driver.quit()
 
