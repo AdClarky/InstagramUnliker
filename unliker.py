@@ -80,10 +80,10 @@ def main():
             continue
         if unlike_all(driver):
             num_processed += 1
-            if (num_processed % LONG_PAUSE_AMOUNT) == 0:
-                long_sleep(LONG_SLEEP_MINS)
             logging.info(f"#{num_processed} processed, {round((num_processed / total) * 100, 2)}% complete: "
                          f"{driver.current_url}")
+            if (num_processed % LONG_PAUSE_AMOUNT) == 0:
+                long_sleep(LONG_SLEEP_MINS)
 
     driver.quit()
 
