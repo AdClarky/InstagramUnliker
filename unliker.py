@@ -51,11 +51,17 @@ def main():
 
     config = Config("config.json")
 
-    done_urls = history.read()
+    history_urls = history.read()
 
     urls = read_urls(config.liked_posts_path)
     urls = [url.replace("/reel/", "/reels/") for url in urls]
+
+    done_urls = set(urls).intersection(set(history_urls))
+    logging.info(f"Skipping {len(done_urls)} urls that have already been processed.")
+
+    urls = set(urls) - done_urls
     total = len(urls)
+    logging.info(f"Processing {len(urls)} urls.")
 
     options = webdriver.FirefoxOptions()
     options.add_argument("-profile")
@@ -65,9 +71,6 @@ def main():
     num_processed = 0
 
     for url in urls:
-        if url in done_urls:
-            logging.info(f"Skipping as already processed: {url}")
-            continue
         logging.info(f"Processing {url}")
         driver.get(url)
         if is_blank(driver):
